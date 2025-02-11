@@ -1,0 +1,42 @@
+# Ignore arquivos e diretórios do Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.sqlite3
+db.sqlite3
+*.log
+
+# Ignore arquivos do ambiente virtual
+venv/
+env/
+*.venv
+*.env
+Pipfile
+Pipfile.lock
+
+# Ignore configurações e credenciais sensíveis
+.env
+*.secret
+config/settings_local.py
+
+# Ignore arquivos e diretórios do Django
+/media/
+/static/
+staticfiles/
+*.bak
+
+# Ignore arquivos do editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore arquivos do Docker
+docker-compose.override.yml
+*.dockerfile
+
+# Ignore arquivos de migração incompletos
+**/migrations/*.pyc
+**/migrations/__pycache__/
+**/migrations/*.py, !**/migrations/__init__.py
