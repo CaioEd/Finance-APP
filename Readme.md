@@ -25,7 +25,7 @@ make run
 
 ### 3. Access to Django Admin
 ```shell
-python manage.py createsuperuser # Create a super user and access 
+python manage.py createsuperuser # Create a super user and access http://localhost:8000/admin/
 
 ### Software ##
 - Docker
