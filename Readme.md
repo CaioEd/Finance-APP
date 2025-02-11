@@ -23,6 +23,10 @@ make database # Run PostgreSQL container
 make run 
 ```  
 
+### 3. Access to Django Admin
+```shell
+python manage.py createsuperuser # Create a super user and access 
+
 ### Software ##
 - Docker
 - Python 3.9
