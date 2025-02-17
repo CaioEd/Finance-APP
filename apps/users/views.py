@@ -65,7 +65,7 @@ def list_users(request):
 @csrf_exempt
 def edit_user(request, user_id):
     try:
-        user = User.objects.get(id= user_id)
+        user = User.objects.get(id=user_id)
     except User.DoesNotExist:
         return JsonResponse({"error": "User not Found"}, status=404)
     
