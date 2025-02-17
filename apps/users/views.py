@@ -18,9 +18,10 @@ def register(request):
         if User.objects.filter(username=username).exists():
             return JsonResponse({"error": "User already exists"}, status=400)
         
-        user = User.objects.create(
-            username=username, email=email, password=password, first_name=first_name
+        user = User(
+            username=username, email=email, first_name=first_name
         )
+        user.set_password(password)
         user.save()
         return JsonResponse({"message": "User Created"}, status=201)
     
@@ -31,7 +32,6 @@ def register(request):
 def user_login(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        first_name = data.get("first_name")
         username = data.get("username")
         password = data.get("password")
         user = authenticate(request, username=username, password=password)
