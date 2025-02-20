@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from models import Incomes
+from .models import Incomes
 import json
 
 @csrf_exempt
@@ -26,6 +26,7 @@ def create_income(request):
     return JsonResponse({"error": "Method not Allowed"}, status=405)
 
 
+@csrf_exempt
 def edit_income(request, income_id):
     try:
         income = Incomes.objects.get(id=income_id)
@@ -44,6 +45,7 @@ def edit_income(request, income_id):
     return JsonResponse({"error": "Method Not Allowed"}, status=405)
 
 
+@csrf_exempt
 def delete_income(request, income_id):
     try:
         income = Incomes.objects.get(id=income_id)

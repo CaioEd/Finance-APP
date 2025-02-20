@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from models import Expenses
+from .models import Expenses
 import json
 
 @csrf_exempt
@@ -25,6 +25,7 @@ def create_expense(request):
     return JsonResponse({"error": "Method Not Allowed"}, status=405)
 
 
+@csrf_exempt
 def edit_expense(request, expense_id):
     try:
         expense = Expenses.objects.get(id=expense_id)
@@ -43,6 +44,7 @@ def edit_expense(request, expense_id):
     return JsonResponse({"error": "Method Not Allowed"}, status=405)
 
 
+@csrf_exempt
 def delete_expense(request, expense_id):
     try:
         expense = Expenses.objects.get(id=expense_id)
