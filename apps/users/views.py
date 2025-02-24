@@ -83,3 +83,19 @@ def edit_user(request, user_id):
         return JsonResponse({"message": "User Update Ok"}, status=200)
     
     return JsonResponse({"error": "Method Not Allowed"}, status=405)
+
+
+@csrf_exempt
+def get_user_by_id(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "User not Found"}, status=404)
+    
+    user_data = {
+        "id": user.id,
+        "username": user.username,
+        "first_name": user.first_name,
+        "email": user.email
+    }
+    return JsonResponse(user_data)

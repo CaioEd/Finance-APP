@@ -5,7 +5,7 @@ install:
 	pip install -r requirements.txt
 
 database:
-	docker-compose up -d
+	docker compose up -d
 
 migrations:
 	python manage.py makemigrations

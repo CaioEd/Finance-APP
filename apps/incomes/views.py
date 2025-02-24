@@ -57,3 +57,20 @@ def delete_income(request, income_id):
         return JsonResponse({"message": "Income deleted successfully"}, status=200)
     
     return JsonResponse({"error": "Method Not Allowed"}, status=405)
+
+
+@csrf_exempt
+def getincome_by_id(request, income_id):
+    try:
+        income = Incomes.objects.get(id=income_id)
+    except Incomes.DoesNotExist:
+        return JsonResponse({"error": "Income not found"}, status=404)
+    
+    return JsonResponse({
+        "id": income.id,
+        "title": income.title,
+        "value": income.value,
+        "category": income.category,
+        "created_at": income.created_at
+    })
+

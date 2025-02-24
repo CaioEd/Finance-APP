@@ -56,3 +56,20 @@ def delete_expense(request, expense_id):
         return JsonResponse({"message": "Expense deleted successfully"}, status=200)
 
     return JsonResponse({"error": "Method Not Allowed"}, status=405)
+
+
+@csrf_exempt
+def get_expense_by_id(request, expense_id):
+    try:
+        expense = Expenses.objects.get(id=expense_id)
+    except Expenses.DoesNotExist:
+        return JsonResponse({"error": "Expense not found"}, status=404)
+
+    return JsonResponse({
+        "id": expense.id,
+        "title": expense.title,
+        "value": expense.value,
+        "category": expense.category,
+        "created_at": expense.created_at
+    }, status=200)
+
