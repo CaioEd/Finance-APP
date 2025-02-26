@@ -20,6 +20,8 @@ make install # To install dependencies
 ### 2. Running the Application and Database
 ```shell
 make database # Run PostgreSQL container
+make migrations
+make migrate # Before running make migrate, create a .env file
 make run 
 ```  
 

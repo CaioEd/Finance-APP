@@ -21,7 +21,7 @@ import apps.incomes.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(apps.users.urls)),
-    path('', include(apps.expenses.urls)),
-    path('', include(apps.incomes.urls)),
+    path('api/', include(apps.users.urls)),
+    path('api/', include(apps.expenses.urls)),
+    path('api/', include(apps.incomes.urls)),
 ]
