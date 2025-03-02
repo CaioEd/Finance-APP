@@ -4,7 +4,7 @@ from rest_framework import serializers
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id', 'first_name', 'username', 'email', 'password']
         extra_kwargs = {'password': {'write_only': True}}   # Prevent password from being exposed in API responses.
 
     def create(self, validated_data):

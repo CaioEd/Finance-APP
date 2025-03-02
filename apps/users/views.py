@@ -27,12 +27,11 @@ def register_user(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_user(request):
-    email = request.data.get("email")
+    email = request.data.get("email")  
     password = request.data.get("password")
-    user = authenticate(email=email, password=password)
+    user = authenticate(email=email, password=password)  
 
     if user:
         token, _ = Token.objects.get_or_create(user=user)
         return Response({'token': token.key}, status=status.HTTP_200_OK)
     return Response({'error': 'Invalid Credentials'}, status=status.HTTP_400_BAD_REQUEST)
-
