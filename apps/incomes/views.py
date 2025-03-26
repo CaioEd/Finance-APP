@@ -1,9 +1,9 @@
+from django.utils.timezone import now
+from django.db.models import Sum
+
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from django.utils.timezone import now
-from django.db.models import Sum
 
 from .models import Incomes
 from .serializer import IncomeSerializer
@@ -24,4 +24,4 @@ class TotalIncomesView(APIView):
             ).aggregate(total=Sum("value"))["total"] or 0
         )
 
-        return Response({"total_income": month_incomes})
+        return Response({"total_incomes": month_incomes})
