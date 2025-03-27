@@ -28,3 +28,4 @@ class TotalBalanceView(APIView):
         total_balance = month_incomes - month_expenses
 
         return Response({"total_balance": total_balance})
+    
