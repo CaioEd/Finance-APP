@@ -1,4 +1,4 @@
-update-requirements:
+freeze:
 	pip freeze > requirements.txt
 
 install:
