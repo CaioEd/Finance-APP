@@ -5,7 +5,6 @@ from apps.users.views import register_user, login_user, logout_user, CustomToken
 import apps.users.urls
 import apps.expenses.urls
 import apps.incomes.urls
-import apps.views
 
 from django.contrib import admin
 from django.urls import path, include
@@ -28,8 +27,8 @@ urlpatterns = [
 
     path('api/incomes/month', apps.incomes.views.TotalIncomesView.as_view(), name="incomes_month"),
     path('api/expenses/month', apps.expenses.views.TotalExpensesView.as_view(), name="expenses_month"),
-    path('api/balance/month/', apps.views.TotalBalanceView.as_view(), name="balance_month"), 
+    path('api/balance/month/', apps.balance.views.TotalBalanceView.as_view(), name="balance_month"), 
     path('balance/', apps.balance.views.BalanceView.as_view(), name="balance"),
 
-    path('api/balance/date/', apps.views.FilterBalanceByDateView.as_view(), name="balance_date"),
+    path('api/balance/date/', apps.balance.views.FilterBalanceByDateView.as_view(), name="balance_date"),
 ]
