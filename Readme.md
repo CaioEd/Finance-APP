@@ -1,5 +1,5 @@
 # FINANCE - APP  
-Financial management software   
+Financial management API software 
 
 ## Disclaimer  
 All commands are available in the Makefile. Use the following command to see available targets:  
@@ -34,6 +34,3 @@ python manage.py createsuperuser # Create a super user and access http://localho
 - Python 3.9
 - Postgresql
  
-
-### TODO  
-- ...
