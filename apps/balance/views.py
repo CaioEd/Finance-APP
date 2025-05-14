@@ -138,7 +138,7 @@ class DownloadPdfByDateView(APIView):
         expenses = Expenses.objects.filter(data__range=[start_date, end_date])
 
         total_incomes = sum(income.value for income in incomes)
-        total_expenses = sum(expense.value for expense in incomes)
+        total_expenses = sum(expense.value for expense in expenses)
 
         total_balance = total_incomes - total_expenses
 
