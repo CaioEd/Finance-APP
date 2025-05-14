@@ -31,5 +31,5 @@ urlpatterns = [
     path('balance/', apps.balance.views.BalanceView.as_view(), name="balance"),
 
     path('api/balance/date/', apps.balance.views.FilterBalanceByDateView.as_view(), name="balance_date"),
-    path('api/pdf/balance/date/', apps.balance.views.DownloadPdfByDateView.as_view(), name="download_balance_pdf")
+    path('api/download/balance/date/', apps.balance.views.DownloadPdfByDateView.as_view(), name="download_balance_pdf")
 ]
