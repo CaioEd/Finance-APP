@@ -3,10 +3,13 @@ from rest_framework.response import Response
 from datetime import datetime, timedelta
 from django.utils.timezone import now
 from django.db.models import Sum
+from django.http import FileResponse
 from .models import Balance
 from apps.expenses.models import Expenses
 from apps.incomes.models import Incomes
 from datetime import datetime
+from reportlab.pdfgen import canvas
+from io import BytesIO
 
 # OBTÉM OS BALANÇOS DE TODOS OS MESES, INCLUINDO RECEITAS E DESPESAS
 class BalanceView(APIView):
@@ -116,3 +119,62 @@ class FilterBalanceByDateView(APIView):
 
         return Response({"total_balance": total_balance, "incomes": month_incomes, "expenses": month_expenses})
     
+
+class DownloadPdfByDateView(APIView):
+
+    def get(self, request):
+        start_date_str = request.query_params.get("start_date")
+        end_date_str = request.query_params.get("end_date")
+
+        if not start_date_str or not end_date_str:
+            return Response({"error": "start_date and end_date are required"}, status=400)
+        try:
+            start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+            end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
+        except ValueError:
+            return Response({"error": "Invalid date format. Use YYYY-MM-DD."}, status=400)
+        
+        incomes = Incomes.objects.filter(data__range=[start_date, end_date])
+        expenses = Expenses.objects.filter(data__range=[start_date, end_date])
+
+        total_incomes = sum(income.value for income in incomes)
+        total_expenses = sum(expense.value for expense in incomes)
+
+        total_balance = total_incomes - total_expenses
+
+        # Cria o PDF
+        buffer = BytesIO()
+        p = canvas.Canvas(buffer)
+
+        p.setFont("Helvetica-Bold", 16)
+        p.drawString(200, 800, "Resumo Financeiro")
+        p.setFont("Helvetica", 12)
+        p.drawString(50, 770, f"Período: {start_date} até {end_date}")
+
+        y = 740
+        p.drawString(50, y, "Receitas:")
+        y -= 20
+        for income in incomes:
+            p.drawString(70, y, f"- {income.title} | R$ {income.value:.2f} | {income.created_at.strftime('%d/%m/%Y')}")
+            y -= 20
+
+        y -= 10
+        p.drawString(50, y, "Despesas:")
+        y -= 20
+        for expense in expenses:
+            p.drawString(70, y, f"- {expense.title} | R$ {expense.value:.2f} | {expense.created_at.strftime('%d/%m/%Y')}")
+            y -= 20
+
+        y -= 20
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(50, y, f"Total de Receitas: R$ {total_incomes:.2f}")
+        y -= 20
+        p.drawString(50, y, f"Total de Despesas: R$ {total_expenses:.2f}")
+        y -= 20
+        p.drawString(50, y, f"Saldo: R$ {total_balance:.2f}")
+
+        p.showPage()
+        p.save()
+
+        buffer.seek(0)
+        return FileResponse(buffer, as_attachment=True, filename='resumo.pdf')
