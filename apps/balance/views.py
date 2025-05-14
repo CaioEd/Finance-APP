@@ -134,8 +134,11 @@ class DownloadPdfByDateView(APIView):
         except ValueError:
             return Response({"error": "Invalid date format. Use YYYY-MM-DD."}, status=400)
         
-        incomes = Incomes.objects.filter(data__range=[start_date, end_date])
-        expenses = Expenses.objects.filter(data__range=[start_date, end_date])
+        try:
+            incomes = Incomes.objects.filter(created_at__range=[start_date, end_date])
+            expenses = Expenses.objects.filter(created_at__range=[start_date, end_date])
+        except Exception as e:
+            return Response({"error": f"Error fetching data: {str(e)}"}, status=500)
 
         total_incomes = sum(income.value for income in incomes)
         total_expenses = sum(expense.value for expense in expenses)
