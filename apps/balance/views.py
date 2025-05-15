@@ -4,12 +4,16 @@ from datetime import datetime, timedelta
 from django.utils.timezone import now
 from django.db.models import Sum
 from django.http import FileResponse
+from django.conf import settings
 from .models import Balance
 from apps.expenses.models import Expenses
 from apps.incomes.models import Incomes
 from datetime import datetime
 from reportlab.pdfgen import canvas
 from io import BytesIO
+import os
+
+logo_path = os.path.join(settings.BASE_DIR, 'static', 'images', 'finance-logo.png')
 
 # OBTÉM OS BALANÇOS DE TODOS OS MESES, INCLUINDO RECEITAS E DESPESAS
 class BalanceView(APIView):
@@ -146,23 +150,31 @@ class DownloadPdfByDateView(APIView):
         total_balance = total_incomes - total_expenses
 
         # Cria o PDF
+        # BytesIO() cria um objeto de memória para armazenar dados em bytes
+        # Canvas(buffer) inicia um PDF e escreve dentro desse buffer
         buffer = BytesIO()
         p = canvas.Canvas(buffer)
 
-        p.setFont("Helvetica-Bold", 16)
-        p.drawString(200, 800, "Resumo Financeiro")
-        p.setFont("Helvetica", 12)
+        p.drawImage(logo_path, 50, 780, width=100, height=35)
+
+        p.setFont("Helvetica-Bold", 18)
+        p.drawString(250, 800, "Resumo Financeiro")
+
         p.drawString(50, 770, f"Período: {start_date} até {end_date}")
 
-        y = 740
+        y = 700
+        p.setFont("Helvetica-Bold", 12)
         p.drawString(50, y, "Receitas:")
+        p.setFont("Helvetica", 12)
         y -= 20
         for income in incomes:
             p.drawString(70, y, f"- {income.title} | R$ {income.value:.2f} | {income.created_at.strftime('%d/%m/%Y')}")
             y -= 20
 
         y -= 10
+        p.setFont("Helvetica-Bold", 12)
         p.drawString(50, y, "Despesas:")
+        p.setFont("Helvetica", 12)
         y -= 20
         for expense in expenses:
             p.drawString(70, y, f"- {expense.title} | R$ {expense.value:.2f} | {expense.created_at.strftime('%d/%m/%Y')}")
