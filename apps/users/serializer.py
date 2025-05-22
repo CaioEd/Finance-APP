@@ -12,6 +12,12 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
     
+    def update(self, instance ,validated_data):
+        password = validated_data.pop('password', None)
+        if password:
+            instance.set_password(password)
+        return super().update(instance, validated_data)    
+    
 
 # Novo serializer para JWT token customizado
 # Adiciona informações personalizadas ao payload do token JWT.
